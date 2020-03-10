@@ -9,6 +9,10 @@ using namespace std;
 
 struct student{
 	//Define struct student with four member (name ,id , gender, gpa);
+	char name;
+	int id;
+	char gender;
+	double gpa;
 };
 
 struct course{
@@ -56,9 +60,10 @@ int main(){
 	
 	while(getline(student_file,textline)){
 		student s; 
-	
 		//Assign value to the members of struct s;
-	
+		//sscanf เก็บแต่ละตัวแปร
+		//s.name s.id s.gender s.grade
+		sscanf(textline.c_str(),"%[^:]: %d %c %d",s.name,&s.id,s.gender,&s.gpa);
 		allstudents.push_back(s); 		
 	}
 	
@@ -77,13 +82,17 @@ int main(){
 				state = 3;
 			}else{
 				//Append lecture_list;
-			}			
-		}else{
+				//allcourse[ตัวล่าสุด].lacture_list
+						
+		}}
+		else{
 			if(textline == "---------------------------------------"){
 				state = 1;
 			}else{
 				student *p = findstudent(allstudents,atof(textline.c_str()));
 				//Append student_list;
+				//allcourse[ตัวล่าสุด].student_list
+				
 			}
 		}
 	}
