@@ -69,8 +69,9 @@ int main(){
 	
 	int state = 1;
 	while(getline(course_file,textline)){
+		course c;
 		if(state == 1){
-			course c;
+			
 			int loc = textline.find_first_of('(');
 			c.name = textline.substr(0,loc-1);
 			c.id = atof(textline.substr(loc+1,5).c_str());
@@ -83,16 +84,18 @@ int main(){
 			}else{
 				//Append lecture_list;
 				//allcourse[ตัวล่าสุด].lacture_list
-						
-		}}
+				allcourses[allcourses.size()-1].lecture_list.push_back(textline);
+		}
+		}
 		else{
 			if(textline == "---------------------------------------"){
 				state = 1;
+			
 			}else{
 				student *p = findstudent(allstudents,atof(textline.c_str()));
 				//Append student_list;
 				//allcourse[ตัวล่าสุด].student_list
-				
+				allcourses[allcourses.size()-1].student_list.push_back(p);
 			}
 		}
 	}
