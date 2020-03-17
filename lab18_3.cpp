@@ -8,8 +8,7 @@
 using namespace std;
 
 struct student{
-	//Define struct student with four member (name ,id , gender, gpa);
-	char name;
+	string name;
 	int id;
 	char gender;
 	double gpa;
@@ -22,7 +21,7 @@ struct course{
 	vector<student *> student_list;
 };
 
-student * findstudent(vector<student> allstudents,int key){ //Correct this line
+student * findstudent(vector<student> &allstudents,int key){ //Correct this line
 	for(unsigned int i = 0; i < allstudents.size(); i++){
 		if(allstudents[i].id  == key) return &allstudents[i];
 	}
@@ -40,7 +39,7 @@ void printreport(vector<course> allcourses){
 		cout << "\n\nStudents:\t";
 		for(unsigned int j = 0; j < allcourses[i].student_list.size();j++){
 			if(j != 0) cout << "\t\t";
-			cout << setw(15) << left << allcourses[i].student_list[j]->name << "\t";
+			cout << setw(20) << left << allcourses[i].student_list[j]->name << "\t";
 			cout << allcourses[i].student_list[j]->id << "\t";
 			cout << allcourses[i].student_list[j]->gender << "\t";
 			cout << allcourses[i].student_list[j]->gpa << "\n";
@@ -57,21 +56,21 @@ int main(){
 	vector<course> allcourses;
 	
 	string textline;
+	char namedata[100];
+    int iddata;
+	char genderdata,format[]="%[^,],%d,%c,%f";
+	float gpadata;
 	
-	while(getline(student_file,textline)){
-		student s; 
-		//Assign value to the members of struct s;
-		//sscanf เก็บแต่ละตัวแปร
-		//s.name s.id s.gender s.grade
-		sscanf(textline.c_str(),"%[^:]: %d %c %d",s.name,&s.id,s.gender,&s.gpa);
+	while(getline(student_file,textline)){ 
+		sscanf(textline.c_str(),format,namedata,&iddata,&genderdata,&gpadata);
+		student s={namedata,iddata,genderdata,gpadata};
 		allstudents.push_back(s); 		
 	}
 	
-	int state = 1;
+int state = 1;
 	while(getline(course_file,textline)){
-		course c;
 		if(state == 1){
-			
+			course c;
 			int loc = textline.find_first_of('(');
 			c.name = textline.substr(0,loc-1);
 			c.id = atof(textline.substr(loc+1,5).c_str());
@@ -81,24 +80,23 @@ int main(){
 		}else if(state == 2){
 			if(textline == "> Students"){
 				state = 3;
+				
 			}else{
-				//Append lecture_list;
-				//allcourse[ตัวล่าสุด].lacture_list
 				allcourses[allcourses.size()-1].lecture_list.push_back(textline);
-		}
-		}
-		else{
+
+				//Append lecture_list;
+			}			
+		}else{
 			if(textline == "---------------------------------------"){
 				state = 1;
-			
 			}else{
 				student *p = findstudent(allstudents,atof(textline.c_str()));
-				//Append student_list;
-				//allcourse[ตัวล่าสุด].student_list
 				allcourses[allcourses.size()-1].student_list.push_back(p);
+				//Append student_list;
 			}
 		}
 	}
+
 	printreport(allcourses);
 	
 }
